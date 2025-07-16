@@ -1,5 +1,6 @@
 from getpass import getpass
-from termcolor import colored
+from printers import print_menu, print_satus
+
 
 def main() -> None:
 
@@ -12,8 +13,7 @@ def main() -> None:
                 'password': password
             })
 
-    print("1. Kirish")
-    print("2. Ro'yxatdan o'tish")
+    print_menu()
 
     op = input("> ")
 
@@ -25,12 +25,13 @@ def main() -> None:
         confirm_password = getpass("confirm password: ")
 
         if password != confirm_password:
-            print("parol mos emas.")
+            print_satus("parol mos emas.", 'error')
         elif username in list(map(lambda user: user['username'], users)):
-            print("bu username tanlangan.")
+            print_satus("bu username tanlangan.", "error")
         else:
             with open("data/users.txt", "a") as f:
                 f.write(f"{username}, {password}\n")
+            print_satus("ro'yxatdan otdingiz.", 'success')
     else:
         print("xato tanlov")
 
