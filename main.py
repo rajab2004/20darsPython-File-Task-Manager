@@ -4,7 +4,7 @@ from utils import (
     is_valid_username, is_same_password, 
     is_valid_password, laod_users, 
     add_user, make_password,
-    is_username,
+    is_username, get_user,
 )
 
 
@@ -14,7 +14,15 @@ def main() -> None:
     op = input("> ")
 
     if op == '1':
-        pass
+        username = input("username: ")
+        password = getpass("password: ")
+
+        user = get_user(username, password)
+        if user:
+            print_satus("muvaffaqiyatli kirdingiz.", 'success')
+        else:
+            print_satus("user topilmadi", 'error')
+
     elif op == '2':
         username = input("username: ")
         password = getpass("password: ")

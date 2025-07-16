@@ -33,3 +33,13 @@ def make_password(password: str) -> str:
 def is_username(username: str) -> bool:
     users = laod_users()
     return username in list(map(lambda user: user['username'], users))
+
+def get_user(username: str, password: str) -> dict:
+    users = laod_users()
+    hashed_password = make_password(password)
+
+    for user in users:
+        if user['username'] == username and user['password'] == hashed_password:
+            return user
+    
+    return None
