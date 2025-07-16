@@ -1,18 +1,14 @@
 from getpass import getpass
 from printers import print_menu, print_satus
+from utils import (
+    is_valid_username, is_same_password, 
+    is_valid_password, laod_users, 
+    add_user, make_password,
+    is_username,
+)
 
 
 def main() -> None:
-
-    with open('data/users.txt') as f:
-        users = []
-        for line in f.readlines():
-            username, password = line[:-1].split(', ')
-            users.append({
-                'username': username,
-                'password': password
-            })
-
     print_menu()
 
     op = input("> ")
@@ -24,13 +20,16 @@ def main() -> None:
         password = getpass("password: ")
         confirm_password = getpass("confirm password: ")
 
-        if password != confirm_password:
-            print_satus("parol mos emas.", 'error')
-        elif username in list(map(lambda user: user['username'], users)):
+        if is_username(username):
             print_satus("bu username tanlangan.", "error")
+        elif not is_valid_username(username):
+            print_satus("username faqat harflardan iborat bolsin.", 'error')
+        elif not is_valid_password(password):
+            print_satus("pasrol kamida 8 ta belgigan iborat bolsin.", 'error')
+        elif not is_same_password(password, confirm_password):
+            print_satus("parol mos emas.", 'error')
         else:
-            with open("data/users.txt", "a") as f:
-                f.write(f"{username}, {password}\n")
+            add_user(username, make_password(password))
             print_satus("ro'yxatdan otdingiz.", 'success')
     else:
         print("xato tanlov")
