@@ -1,45 +1,44 @@
 from hashlib import sha256
 
-def is_valid_username(username: str) -> bool:
-    return username.isalpha()
+def foydalanuvchi_yaroqli(login: str) -> bool:
+    return login.isalpha()
 
-def is_valid_password(password: str) -> bool:
-    return len(password) >= 8
+def parol_yaroqli(parol: str) -> bool:
+    return len(parol) >= 8
 
-def is_same_password(password: str, confirm: str) -> bool:
-    return password == confirm
+def parollar_mosmi(parol: str, tasdiq: str) -> bool:
+    return parol == tasdiq
 
-def laod_users() -> list[dict]:
+def foydalanuvchilarni_yuklash() -> list[dict]:
     with open('data/users.txt') as f:
-        users = []
-        for line in f.readlines():
-            username, password = line[:-1].split(', ')
-            users.append({
-                'username': username,
-                'password': password
+        foydalanuvchilar = []
+        for qator in f.readlines():
+            login, parol = qator[:-1].split(', ')
+            foydalanuvchilar.append({
+                'login': login,
+                'parol': parol
             })
 
-    return users
+    return foydalanuvchilar
 
-def add_user(username: str, password: str):
+def foydalanuvchi_qoshish(login: str, parol: str):
     with open("data/users.txt", "a") as f:
-        f.write(f"{username}, {password}\n")
+        f.write(f"{login}, {parol}\n")
 
-def make_password(password: str) -> str:
-    hashed_password = sha256(password.encode()).hexdigest()
-    return hashed_password
+def parolni_shifrlash(parol: str) -> str:
+    shifrlangan = sha256(parol.encode()).hexdigest()
+    return shifrlangan
 
+def login_bandmi(login: str) -> bool:
+    foydalanuvchilar = foydalanuvchilarni_yuklash()
+    return login in list(map(lambda foy: foy['login'], foydalanuvchilar))
 
-def is_username(username: str) -> bool:
-    users = laod_users()
-    return username in list(map(lambda user: user['username'], users))
+def foydalanuvchini_ol(login: str, parol: str) -> dict:
+    foydalanuvchilar = foydalanuvchilarni_yuklash()
+    shifrlangan = parolni_shifrlash(parol)
 
-def get_user(username: str, password: str) -> dict:
-    users = laod_users()
-    hashed_password = make_password(password)
-
-    for user in users:
-        if user['username'] == username and user['password'] == hashed_password:
-            return user
+    for foy in foydalanuvchilar:
+        if foy['login'] == login and foy['parol'] == shifrlangan:
+            return foy
     
     return None

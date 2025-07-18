@@ -1,15 +1,13 @@
 from termcolor import colored
 
-def print_menu():
+def menyuni_chiqarish():
     print("1. Kirish")
     print("2. Ro'yxatdan o'tish")
 
-
-def print_satus(text, status):
-    types = {
+def holatni_chiqarish(matn, holat):
+    ranglar = {
         'error': 'red',
         'success': 'green'
     }
-    colored_text = colored(text, types[status])
-    print(colored_text)
-    
+    rangli_matn = colored(matn, ranglar[holat])
+    print(rangli_matn)

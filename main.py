@@ -1,45 +1,44 @@
 from getpass import getpass
-from printers import print_menu, print_satus
+from printers import menyuni_chiqarish, holatni_chiqarish
 from utils import (
-    is_valid_username, is_same_password, 
-    is_valid_password, laod_users, 
-    add_user, make_password,
-    is_username, get_user,
+    foydalanuvchi_yaroqli, parollar_mosmi, 
+    parol_yaroqli, foydalanuvchilarni_yuklash, 
+    foydalanuvchi_qoshish, parolni_shifrlash,
+    login_bandmi, foydalanuvchini_ol,
 )
 
+def asosiy() -> None:
+    menyuni_chiqarish()
 
-def main() -> None:
-    print_menu()
+    tanlov = input("> ")
 
-    op = input("> ")
+    if tanlov == '1':
+        login = input("Login: ")
+        parol = getpass("Parol: ")
 
-    if op == '1':
-        username = input("username: ")
-        password = getpass("password: ")
-
-        user = get_user(username, password)
-        if user:
-            print_satus("muvaffaqiyatli kirdingiz.", 'success')
+        foydalanuvchi = foydalanuvchini_ol(login, parol)
+        if foydalanuvchi:
+            holatni_chiqarish("Muvaffaqiyatli kirdingiz.", 'success')
         else:
-            print_satus("user topilmadi", 'error')
+            holatni_chiqarish("Foydalanuvchi topilmadi.", 'error')
 
-    elif op == '2':
-        username = input("username: ")
-        password = getpass("password: ")
-        confirm_password = getpass("confirm password: ")
+    elif tanlov == '2':
+        login = input("Login: ")
+        parol = getpass("Parol: ")
+        tasdiq_parol = getpass("Parolni tasdiqlang: ")
 
-        if is_username(username):
-            print_satus("bu username tanlangan.", "error")
-        elif not is_valid_username(username):
-            print_satus("username faqat harflardan iborat bolsin.", 'error')
-        elif not is_valid_password(password):
-            print_satus("pasrol kamida 8 ta belgigan iborat bolsin.", 'error')
-        elif not is_same_password(password, confirm_password):
-            print_satus("parol mos emas.", 'error')
+        if login_bandmi(login):
+            holatni_chiqarish("Bu login band.", "error")
+        elif not foydalanuvchi_yaroqli(login):
+            holatni_chiqarish("Login faqat harflardan iborat bo'lishi kerak.", 'error')
+        elif not parol_yaroqli(parol):
+            holatni_chiqarish("Parol kamida 8 ta belgidan iborat bo'lishi kerak.", 'error')
+        elif not parollar_mosmi(parol, tasdiq_parol):
+            holatni_chiqarish("Parollar mos emas.", 'error')
         else:
-            add_user(username, make_password(password))
-            print_satus("ro'yxatdan otdingiz.", 'success')
+            foydalanuvchi_qoshish(login, parolni_shifrlash(parol))
+            holatni_chiqarish("Ro'yxatdan o'tdingiz.", 'success')
     else:
-        print("xato tanlov")
+        print("Noto'g'ri tanlov.")
 
-main()
+asosiy()
